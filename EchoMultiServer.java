@@ -1,4 +1,4 @@
-package pr2;
+package server;
 
 import java.net.*;
 import java.io.*;
@@ -18,8 +18,16 @@ public class EchoMultiServer {
 
       boolean listening = true;
       while (listening) {
-         //EJERCICIO: aceptar una nueva conexión 
-         //EJERCICIO: y crear un Thread para que la gestione
+         //EJERCICIO: aceptar una nueva conexión		YA
+         //EJERCICIO: y crear un Thread para que la gestione	YA
+    	 Socket clienSocket = null;
+    	 try {
+    		 clienSocket = serverSocket.accept();
+    	 } catch (IOException e) {
+    		 System.err.println("Accept failed on port: 7," + e.getMessage());
+    		 continue;
+    	 }
+    	 new EchoMultiServerThread(clienSocket).start();
      }
 
      try {
@@ -46,8 +54,8 @@ class EchoMultiServerThread extends Thread {
         super("EchoMultiServerThread");
         clientSocket = socket;
         try {
-             is = new BufferedReader(new InputStreamReader( //EJERCICIO ... ));
-             os = new PrintWriter( //EJERCICIO ... );
+             is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); //YA
+             os = new PrintWriter(clientSocket.getOutputStream()); //YA
         } catch (IOException e) {
             System.err.println("Error sending/receiving" + e.getMessage());
             e.printStackTrace();
@@ -63,8 +71,10 @@ class EchoMultiServerThread extends Thread {
     public void run() {
        try {
             while ((inputline = is.readLine()) != null) {
-                 //EJERCICIO: Invocar el objeto
-                 //EJERCICIO: y devolver la respuesta por el socket
+                 //EJERCICIO: Invocar el objeto			YA
+                 //EJERCICIO: y devolver la respuesta por el socket		YA
+            	 os.println(inputline);
+            	 os.flush();
             }
 
             os.close();

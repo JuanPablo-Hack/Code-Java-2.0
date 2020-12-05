@@ -1,6 +1,14 @@
 package client;
 
 import java.net.*;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import rmi.EchoInt;
+
 import java.io.*;
 
 class EchoObjectStub2 implements EchoInt, Runnable {
@@ -38,16 +46,35 @@ class EchoObjectStub2 implements EchoInt, Runnable {
   }
 
   private synchronized void connect() throws java.rmi.RemoteException {
-    //EJERCICIO: lo mismo que en EchoObjectStub
+    //EJERCICIO: lo mismo que en EchoObjectStub		YA, creo...
+	  try {
+			echoSocket = new Socket(host, port);
+			is = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+			os = new PrintWriter(echoSocket.getOutputStream());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Don't know about host: "+host);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Couldn't get I/O for connection to: "+host);
+		}
   }
 
   private synchronized void disconnect(){
-    //EJERCICIO: lo mismo que en EchoObjectStub
+    //EJERCICIO: lo mismo que en EchoObjectStub		YA
+	  try {
+			os.close();
+			is.close();
+			echoSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("I/O failed on connection to: "+host);
+		}
   }
 
   private synchronized void programDisconnection(){
     //EJERCICIO: programar un timeout para la cabo de 5 segundos
-
+	//Timeout uno = new Timeout(5).start();
   }
 
    class Timeout {
@@ -61,16 +88,31 @@ class EchoObjectStub2 implements EchoInt, Runnable {
      }
 
      public void start() {
-       //EJERCICIO
+    	 //EJERCICIO	YA
+    	 Date h = new Date();
+         System.out.println(DateFormat.getTimeInstance(3,Locale.FRANCE).format(h) + 
+        		 	" Faltan " + seconds + " seg. para la alarma");
 	 }
 
      public void cancel() {
         //EJERCICIO
      }
-
+     
      class TimeoutTask extends TimerTask {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
           //EJERCICIO
 	 }
 
    }
+
+@Override
+public void run() {
+	// TODO Auto-generated method stub
+	
+}
 }

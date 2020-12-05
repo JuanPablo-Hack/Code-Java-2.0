@@ -5,6 +5,8 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
+import rmi.EchoInt;
+
 
 public class EchoObject implements EchoInt {
   String myURL="localhost";
